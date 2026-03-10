@@ -23,8 +23,8 @@ app.config["PERMANENT_SESSION_LIFETIME"] = 86400
 DISCORD_API = "https://discord.com/api/v10"
 CLIENT_ID = os.getenv("DISCORD_CLIENT_ID")
 CLIENT_SECRET = os.getenv("DISCORD_CLIENT_SECRET")
-REDIRECT_URI = os.getenv("DISCORD_REDIRECT_URI", "http://localhost:5000/callback")
-BASE_URL = os.getenv("BASE_URL", "http://localhost:5000")
+REDIRECT_URI = os.getenv("DISCORD_REDIRECT_URI", "http://localhost/callback")
+BASE_URL = os.getenv("BASE_URL", "http://localhost")
 BOT_TOKEN = os.getenv("DISCORD_TOKEN")
 
 # Komennot – kukin voi kytkeä päälle/pois webissä

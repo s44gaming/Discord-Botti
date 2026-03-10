@@ -6,10 +6,10 @@ load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 DISCORD_CLIENT_ID = os.getenv("DISCORD_CLIENT_ID")
 DISCORD_CLIENT_SECRET = os.getenv("DISCORD_CLIENT_SECRET")
-DISCORD_REDIRECT_URI = os.getenv("DISCORD_REDIRECT_URI", "http://localhost:5000/callback")
+DISCORD_REDIRECT_URI = os.getenv("DISCORD_REDIRECT_URI", "http://localhost/callback")
 FLASK_SECRET_KEY = os.getenv("FLASK_SECRET_KEY")
-BASE_URL = os.getenv("BASE_URL", "http://localhost:5000")
-WEB_PORT = int(os.getenv("WEB_PORT", 5000))
+BASE_URL = os.getenv("BASE_URL", "http://localhost")
+WEB_PORT = int(os.getenv("WEB_PORT", 80))
 DEV_USER_IDS = [x.strip() for x in (os.getenv("DEV_USER_IDS") or "").split(",") if x.strip()]
 
 # Botin status (kuvaus, kehittäjät, kutsu-linkki): data/bot_info.txt tai salattu data/bot_info.enc

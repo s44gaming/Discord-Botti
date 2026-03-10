@@ -45,7 +45,7 @@ pip install -r requirements.txt
 3. Vasemmalla **Bot** → **Reset Token** → kopioi token
 4. Ota käyttöön: **Message Content Intent** ja **Server Members Intent** (mod-roolit, serverilogit)
 5. Vasemmalla **OAuth2** → kopioi **Client ID** ja **Client Secret**
-6. **OAuth2 → Redirects** → lisää: `http://localhost:5000/callback`
+6. **OAuth2 → Redirects** → lisää: `http://localhost/callback` (portti 80)
 
 ### 3. Kutsu botti palvelimelle
 
@@ -64,7 +64,7 @@ pip install -r requirements.txt
 DISCORD_TOKEN=botin_token_tähän
 DISCORD_CLIENT_ID=sovelluksen_client_id
 DISCORD_CLIENT_SECRET=client_secret
-DISCORD_REDIRECT_URI=http://localhost:5000/callback
+DISCORD_REDIRECT_URI=http://localhost/callback
 
 # Tärkeää: Luo satunnainen avain!
 FLASK_SECRET_KEY=generate_a_random_secret_key
@@ -111,13 +111,13 @@ chmod +x start.sh && ./start.sh
 
 Tämä käynnistää:
 - Discord-botin (slash-komennot)
-- Web-dashboardin osoitteessa: http://localhost:5000
+- Web-dashboardin osoitteessa: http://localhost
 
 ---
 
 ## Web-dashboard
 
-1. Avaa http://localhost:5000
+1. Avaa http://localhost
 2. **Kirjaudu Discordilla** – tarvitaan Discord-tili
 3. Valitse palvelin – näkyvät vain palvelimet, joilla sinulla on **Administrator**-oikeudet
 4. Hallitse asetuksia – muutokset astuvat voimaan heti
