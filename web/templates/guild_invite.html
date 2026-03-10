@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xevrion – {{ guild.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <a href="/dashboard" class="brand">Xevrion</a>
+        <nav class="nav">
+            <span class="user-badge">{{ user.username }}</span>
+            <a href="/logout" class="btn btn-ghost">Kirjaudu ulos</a>
+        </nav>
+    </header>
+    <main class="main">
+        <section class="section">
+            <a href="/dashboard" class="back-link">&larr; Takaisin palvelimiin</a>
+            <div class="guild-header">
+                <div class="guild-icon large">
+                    {% if guild.icon %}
+                    <img src="https://cdn.discordapp.com/icons/{{ guild.id }}/{{ guild.icon }}.png" alt="">
+                    {% else %}
+                    <span>{{ guild.name[0] }}</span>
+                    {% endif %}
+                </div>
+                <div>
+                    <h1>{{ guild.name }}</h1>
+                    <p class="muted">Botti ei ole vielä palvelimella</p>
+                </div>
+            </div>
+
+            <div class="panel invite-panel">
+                <p class="muted" style="margin-bottom: 1.5rem;">Xevrion-botti ei ole tällä palvelimella. Kutsu botti alla olevalla painikkeella, jotta voit hallita asetuksia.</p>
+                {% if invite_url %}
+                <a href="{{ invite_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">Kutsu botti palvelimelle</a>
+                <p class="muted" style="margin-top: 1rem; font-size: 0.85rem;">Avautuu Discordiin. Kun botti on lisätty, päivitä sivu tai palaa dashboardiin.</p>
+                {% else %}
+                <p class="empty">Kutsulinkkiä ei voitu luoda. Tarkista CLIENT_ID-asetus.</p>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+</body>
+<!-- Tekijänoikeudet S44Gaming kaikki oikeudet pidätetään. https://discord.gg/ujB4JHfgcg -->
+</html>

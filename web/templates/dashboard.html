@@ -26,7 +26,7 @@
             <p class="muted">Valitse palvelin, jonka asetuksia haluat hallita. Vain palvelimet, joilla sinulla on ylläpito-oikeudet, näkyvät täällä.</p>
             <div class="guild-grid">
                 {% for g in guilds %}
-                <a href="{{ url_for('guild_settings', guild_id=g.id) }}" class="guild-card">
+                <div class="guild-card {% if not g.bot_in %}guild-card--no-bot{% endif %}">
                     <div class="guild-icon">
                         {% if g.icon %}
                         <img src="https://cdn.discordapp.com/icons/{{ g.id }}/{{ g.icon }}.png" alt="">
@@ -36,9 +36,13 @@
                     </div>
                     <div class="guild-info">
                         <strong>{{ g.name }}</strong>
-                        <span class="muted">Hallitse &rarr;</span>
+                        {% if g.bot_in %}
+                        <a href="{{ url_for('guild_settings', guild_id=g.id) }}" class="guild-card-link">Hallitse asetukset &rarr;</a>
+                        {% else %}
+                        <a href="{{ g.invite_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary guild-card-invite">Kutsu botti palvelimelle</a>
+                        {% endif %}
                     </div>
-                </a>
+                </div>
                 {% endfor %}
             </div>
             {% if not guilds %}

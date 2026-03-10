@@ -100,6 +100,34 @@ def get_user_guilds():
     return [g for g in guilds if (int(g.get("permissions", 0) or 0) & ADMIN) == ADMIN]
 
 
+def bot_in_guild(guild_id: str) -> bool:
+    """Tarkistaa onko botti palvelimella. Käyttää shared_state.bot tai API-kutsua."""
+    try:
+        import shared_state
+        bot = shared_state.get_bot()
+        if bot:
+            return any(str(g.id) == str(guild_id) for g in bot.guilds)
+    except Exception:
+        pass
+    if not BOT_TOKEN:
+        return False
+    r = requests.get(
+        f"{DISCORD_API}/guilds/{guild_id}",
+        headers={"Authorization": f"Bot {BOT_TOKEN}", **_REQ_HEADERS},
+        timeout=_REQ_TIMEOUT
+    )
+    return r.status_code == 200
+
+
+def get_bot_invite_url(guild_id: str) -> str:
+    """Palauttaa OAuth2-kutsulinkin, jossa palvelin valittu etukäteen."""
+    if not CLIENT_ID:
+        return ""
+    base = "https://discord.com/api/oauth2/authorize"
+    params = f"client_id={CLIENT_ID}&permissions=8&scope=bot%20applications.commands&guild_id={guild_id}"
+    return f"{base}?{params}"
+
+
 def get_guild_channels(guild_id: str) -> list:
     """Hakee palvelimen tekstikanavat bot-tokenilla. Bottin pitää olla palvelimella."""
     if not BOT_TOKEN:
@@ -225,6 +253,9 @@ def logout():
 @login_required
 def dashboard():
     guilds = get_user_guilds()
+    for g in guilds:
+        g["bot_in"] = bot_in_guild(g["id"])
+        g["invite_url"] = get_bot_invite_url(g["id"]) if not g["bot_in"] else None
     user_id = str(session.get("user", {}).get("id", ""))
     is_dev = bool(DEV_USER_IDS and user_id in DEV_USER_IDS)
     return render_template("dashboard.html", guilds=guilds, user=session["user"], is_dev=is_dev)
@@ -445,6 +476,14 @@ def guild_settings(guild_id):
     guild = next((g for g in guilds if g["id"] == guild_id), None)
     if not guild:
         return "Sinulla ei ole ylläpito-oikeuksia tähän palvelimeen.", 403
+    if not bot_in_guild(guild_id):
+        invite_url = get_bot_invite_url(guild_id)
+        return render_template(
+            "guild_invite.html",
+            guild=guild,
+            invite_url=invite_url,
+            user=session["user"]
+        )
     settings = database.get_guild_settings(guild_id)
     features = []
     for key, label, desc in COMMAND_FEATURES:

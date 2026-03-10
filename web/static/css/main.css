@@ -125,6 +125,11 @@ body {
   background: var(--surface-hover);
 }
 
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
 /* Header */
 .header {
   display: flex;
@@ -210,6 +215,23 @@ body {
 .guild-card:hover {
   background: var(--surface-hover);
   border-color: var(--accent);
+}
+
+.guild-card-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.15s ease;
+}
+
+.guild-card-link:hover {
+  color: var(--accent);
+}
+
+.guild-card-invite {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.75rem;
 }
 
 .guild-icon {
