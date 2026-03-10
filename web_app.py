@@ -8,7 +8,7 @@ from functools import wraps
 import database
 from config import DEV_USER_IDS, BOT_INFO_EDIT_PASSWORD
 
-_REQ_TIMEOUT = 10
+_REQ_TIMEOUT = 30
 _REQ_HEADERS = {"User-Agent": "DiscordBot (Web Dashboard)"}
 
 app = Flask(__name__, template_folder="web/templates", static_folder="web/static")
@@ -89,11 +89,14 @@ def get_user_guilds():
     token = session.get("access_token")
     if not token:
         return []
-    r = requests.get(
-        f"{DISCORD_API}/users/@me/guilds",
-        headers={"Authorization": f"Bearer {token}", **_REQ_HEADERS},
-        timeout=_REQ_TIMEOUT
-    )
+    try:
+        r = requests.get(
+            f"{DISCORD_API}/users/@me/guilds",
+            headers={"Authorization": f"Bearer {token}", **_REQ_HEADERS},
+            timeout=_REQ_TIMEOUT
+        )
+    except requests.RequestException:
+        raise
     if r.status_code != 200:
         return []
     guilds = r.json()
@@ -253,9 +256,23 @@ def logout():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    guilds = get_user_guilds()
+    try:
+        guilds = get_user_guilds()
+    except requests.RequestException:
+        user_id = str(session.get("user", {}).get("id", ""))
+        is_dev = bool(DEV_USER_IDS and user_id in DEV_USER_IDS)
+        return render_template(
+            "dashboard.html",
+            guilds=[],
+            user=session["user"],
+            is_dev=is_dev,
+            error="Discord API ei vastannut ajoissa. Tarkista verkkoyhteys ja yritä uudelleen."
+        ), 503
     for g in guilds:
-        g["bot_in"] = bot_in_guild(g["id"])
+        try:
+            g["bot_in"] = bot_in_guild(g["id"])
+        except requests.RequestException:
+            g["bot_in"] = False
         g["invite_url"] = get_bot_invite_url(g["id"]) if not g["bot_in"] else None
     user_id = str(session.get("user", {}).get("id", ""))
     is_dev = bool(DEV_USER_IDS and user_id in DEV_USER_IDS)

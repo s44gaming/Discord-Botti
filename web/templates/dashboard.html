@@ -23,7 +23,11 @@
     <main class="main">
         <section class="section">
             <h1>Valitse palvelin</h1>
+            {% if error %}
+            <p class="error" style="background:#fee;color:#c00;padding:1rem;border-radius:8px;margin-bottom:1rem;">{{ error }} <a href="/dashboard">Yritä uudelleen</a></p>
+            {% else %}
             <p class="muted">Valitse palvelin, jonka asetuksia haluat hallita. Vain palvelimet, joilla sinulla on ylläpito-oikeudet, näkyvät täällä.</p>
+            {% endif %}
             <div class="guild-grid">
                 {% for g in guilds %}
                 <div class="guild-card {% if not g.bot_in %}guild-card--no-bot{% endif %}">
@@ -45,7 +49,7 @@
                 </div>
                 {% endfor %}
             </div>
-            {% if not guilds %}
+            {% if not guilds and not error %}
             <p class="empty">Ei palvelimia. Sinulla pitää olla ylläpito-oikeudet vähintään yhdellä palvelimella.</p>
             {% endif %}
         </section>
