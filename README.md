@@ -94,8 +94,16 @@ Kopioi tulos ja käytä sitä `FLASK_SECRET_KEY`-arvona.
 
 ### 5. Käynnistä botti
 
+**Windows:**
 ```bash
 python run.py
+```
+
+**Linux / macOS:**
+```bash
+python3 run.py
+# tai
+chmod +x start.sh && ./start.sh
 ```
 
 Tämä käynnistää:
@@ -252,6 +260,7 @@ Botin Discord-statuksessa (»Watching«) näkyy palvelimien määrä, kuvaus ja 
 DiscordBotti/
 ├── LICENSE
 ├── run.py              # Käynnistys (botti + web)
+├── start.sh            # Käynnistys Linuxilla (python3)
 ├── bot.py              # Discord-botin logiikka
 ├── web_app.py          # Flask web-sovellus
 ├── database.py         # Tietokanta (SQLite)
@@ -295,6 +304,26 @@ DiscordBotti/
 - Käytä vahvaa `FLASK_SECRET_KEY`-arvoa
 - Harkitse HTTPS:ää ja reverse-proxyä (esim. Nginx)
 - Voit käyttää Gunicornia web-sovellukselle erillisessä prosessissa
+
+### Linux-palvelimella
+
+Sovellus toimii Windowsin, Linuxin ja macOS:n yli (Python, `os.path`, `pathlib`). Linuxilla:
+
+```bash
+# Asenna riippuvuudet
+pip3 install -r requirements.txt
+
+# Luo virtuaaliympäristö (suositeltu)
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Käynnistä
+python3 run.py
+# tai: ./start.sh
+```
+
+`start.sh` käyttää `python3`-komentoa ja siirtyy automaattisesti projektikansioon.
 
 ## Tuki ja yhteisö
 
