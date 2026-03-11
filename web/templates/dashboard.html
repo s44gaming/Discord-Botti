@@ -16,6 +16,7 @@
             {% if is_dev %}
             <a href="/dev" class="btn btn-ghost">Kehittäjäportaali</a>
             {% endif %}
+            <button type="button" class="btn btn-ghost theme-toggle" id="theme-toggle" title="Vaihda teema">🌙 Tumma</button>
             <span class="user-badge">{{ user.username }}</span>
             <a href="/logout" class="btn btn-ghost">Kirjaudu ulos</a>
         </nav>
@@ -56,6 +57,23 @@
         <footer class="site-footer">© <span id="year"></span> S44Gaming. Kaikki oikeudet pidätetään.</footer>
     </main>
     <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+    <script>
+        (function() {
+            var key = 'xevrion-theme';
+            var saved = localStorage.getItem(key);
+            if (saved === 'light') document.body.classList.add('light-theme');
+            var btn = document.getElementById('theme-toggle');
+            if (btn) {
+                btn.textContent = document.body.classList.contains('light-theme') ? '☀️ Vaalea' : '🌙 Tumma';
+                btn.onclick = function() {
+                    document.body.classList.toggle('light-theme');
+                    var isLight = document.body.classList.contains('light-theme');
+                    localStorage.setItem(key, isLight ? 'light' : 'dark');
+                    btn.textContent = isLight ? '☀️ Vaalea' : '🌙 Tumma';
+                };
+            }
+        })();
+    </script>
 </body>
 <!-- Tekijänoikeudet S44Gaming kaikki oikeudet pidätetään. https://discord.gg/ujB4JHfgcg -->
 </html>

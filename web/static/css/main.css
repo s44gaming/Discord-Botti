@@ -637,5 +637,20 @@ body {
   margin-top: 0;
 }
 
+/* Vaalea teema (tallentuu localStorage) */
+body.light-theme {
+  --bg: #f4f4f5;
+  --surface: #fff;
+  --surface-hover: #f4f4f5;
+  --border: #e4e4e7;
+  --text: #18181b;
+  --text-muted: #71717a;
+  --accent-dim: rgba(124, 58, 237, 0.12);
+}
+
+.theme-toggle {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+}
 
 /* Tekijänoikeudet S44Gaming kaikki oikeudet pidätetään. https://discord.gg/ujB4JHfgcg */
