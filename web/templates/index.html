@@ -13,11 +13,7 @@
     <main class="landing">
         <div class="landing-content">
             <div class="logo-mark">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M24 4C12.954 4 4 12.954 4 24s8.954 20 20 20 20-8.954 20-20S35.046 4 24 4z" fill="url(#g1)"/>
-                    <path d="M30 18h-2v-2a4 4 0 00-8 0v2h-2a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2v-8a2 2 0 00-2-2z" fill="currentColor"/>
-                    <defs><linearGradient id="g1" x1="4" y1="4" x2="44" y2="44"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs>
-                </svg>
+                <img src="{{ url_for('static', filename='imag/profile.png') }}" alt="Bolt-logo" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
             </div>
             <h1>Xevrion</h1>
             <p class="tagline">Xevrion-botin hallinta. Kirjaudu Discord-tilillä – näet vain ne palvelimet, joissa sinulla on ylläpito.</p>
