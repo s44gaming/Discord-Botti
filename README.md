@@ -14,7 +14,7 @@ Voit käyttää S44Gamingin ylläpitämää Xevrion-bottia omalla palvelimellasi
 
 - **Monipalvelin** – sama botti usealla serverillä, kaikki asetukset palvelinkohtaisia
 - **Web-dashboard** – hallitse kaikkia ominaisuuksia palvelin kerrallaan, tumma/vaalea teema (tallentuu selaimen localStorage)
-- **Monikielisyys** – web-käyttöliittymä tukee **55 kieltä**: suomi, englanti, saksa, ranska, espanja, italia, hollanti, puola, portugali, venäjä, japani, kiina, ruotsi, norja, tanska, turkki, korea, tšekki, unkari, indonesia, thai, vietnam, arabia, hindi, ukraina, romania, kreikka, slovakia, heprea, filipino, malaiji, bengali, serbia, bulgaria, kroatia, slovenia, liettua, latvia, viro, persia, swahili, afrikaans, katalaani, galicia, tamil, telugu, malajalam, urdu, azeri, armenia, georgia, sinhala, nepal, burma, khmer
+- **Monikielisyys** – web-käyttöliittymä tukee **55 kieltä**: suomi, englanti, saksa, ranska, espanja, italia, hollanti, puola, portugali, venäjä, japani, kiina, ruotsi, norja, tanska, turkki, korea, tšekki, unkari, indonesia, thai, vietnam, arabia, hindi, ukraina, romania, kreikka, slovakia, heprea, filipino, malaiji, bengali, serbia, bulgaria, kroatia, slovenia, liettua, latvia, viro, persia, swahili, afrikaans, katalaani, galicia, tamil, telugu, malajalam, urdu, azeri, armenia, georgia, sinhala, nepal, burma, khmer. *Huom: käännökset on tehty teköälykäännöksillä, joten niissä voi olla virheitä.*
 - **Ylläpitäjä-tarkistus** – vain palvelimen Administratorit näkevät hallinnan
 - **Peruskomentoja** – ping, info, tervehdys, hallinta, komennot-lista
 - **Kutsulinkit** – /kutsu (Apply bot), /lähetäkutsu (yhteisön kutsu kanavalle)
