@@ -1,3 +1,4 @@
+import asyncio
 import os
 import discord
 from discord.ext import commands
@@ -122,12 +123,36 @@ class Bot(commands.Bot):
         activity = discord.Activity(type=discord.ActivityType.watching, name=text)
         await self.change_presence(activity=activity, status=discord.Status.online)
 
+    async def login(self, token: str):
+        """Login with retry on Discord 503."""
+        for attempt in range(1, 6):
+            try:
+                await super().login(token)
+                return
+            except discord.errors.DiscordServerError:
+                if attempt < 5:
+                    delay = 2**attempt
+                    print(f"Discord API 503, yritetään kirjautumista uudelleen {attempt}/5 ({delay}s)...")
+                    await asyncio.sleep(delay)
+                else:
+                    raise
+
     async def setup_hook(self):
         print("Ladataan extentioita...")
         await _load_extensions(self, "commands")
         await _load_extensions(self, "events")
-        await self.tree.sync()
-        print("Slash-komennot synkronoitu")
+        for attempt in range(1, 6):
+            try:
+                await self.tree.sync()
+                print("Slash-komennot synkronoitu")
+                break
+            except discord.errors.DiscordServerError as e:
+                if attempt < 5:
+                    delay = 2**attempt
+                    print(f"Discord API 503, yritetään uudelleen {attempt}/5 ({delay}s)...")
+                    await asyncio.sleep(delay)
+                else:
+                    raise
 
 
 def create_bot():
