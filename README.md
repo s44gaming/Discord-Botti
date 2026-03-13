@@ -38,7 +38,6 @@ Voit käyttää S44Gamingin ylläpitämää Xevrion-bottia omalla palvelimellasi
 - **Tervetuloa- ja poistumisviestit** – placeholders: {user}, {mention}, {server}, {member_count}
 - **Autorole** – uudet jäsenet saavat automaattisesti roolit
 - **FiveM** – /fivem näyttää palvelimen tilan
-- **Twitch stream -ilmoitukset** – ilmoitus kun streameri aloittaa
 - **Kehittäjäportaali** – DEV_USER_IDS: tilastot, virheloki, varmuuskopio, API-docs, käynnistä/sammuta
 
 ## Vaatimukset
@@ -135,7 +134,6 @@ You can use S44Gaming's hosted Xevrion bot on your own server without self-hosti
 - **Welcome and goodbye messages** – placeholders: {user}, {mention}, {server}, {member_count}
 - **Autorole** – new members automatically receive selected roles
 - **FiveM** – /fivem shows server status
-- **Twitch stream notifications** – notification when streamer goes live
 - **Developer portal** – for DEV_USER_IDS: stats, error log, backup, API docs, start/stop
 
 ## Requirements
