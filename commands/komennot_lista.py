@@ -13,6 +13,7 @@ COMMAND_TO_FEATURE = {
     "avatar": "avatar",
     "userinfo": "userinfo",
     "reverse": "reverse",
+    "tempvoice_panel": "tempvoice",
     "admin": "hallinta",
     "sendinvite": "kutsuviesti",
     "level": "taso",

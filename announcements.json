@@ -1,9 +1,9 @@
 [
   {
     "date": "14.3.2025",
-    "title_key": "announce.ticket_roles.title",
-    "text_key": "announce.ticket_roles.text",
+    "title_key": "announce.tempvoice.title",
+    "text_key": "announce.tempvoice.text",
     "title": "Uudet ominaisuudet",
-    "text": "Tikettiaiheen useat roolit – aiheeseen voi valita web-paneelista useita rooleja (Ctrl/Cmd + klikkaus). Vain valitut roolit näkevät kyseisen aiheen tiketit (staff näkee kaikki)."
+    "text": "TempVoice – webissä päälle/pois kytkettävä TempVoice-paneeli. Käyttäjä voi luoda oman väliaikaisen äänikanavan, jossa vain hänellä on täydet oikeudet. Tyhjä kanava poistuu automaattisesti 5 minuutin jälkeen."
   }
 ]

@@ -492,35 +492,7 @@
                 <button type="button" class="btn btn-primary" id="fivem-save">Tallenna</button>
             </div>
 
-            <div class="settings-card">
-                <h2 data-i18n="gs.twitch">Twitch-ilmoitukset</h2>
-                <p class="card-desc" data-i18n="gs.twitch_desc">Seuraa streamereita ja lähetä ilmoitus kanavalle.</p>
-                <div id="twitch-streamers-list" class="twitch-streamers-list">
-                    {% for s in twitch_streamers %}
-                    <div class="twitch-streamer-row" data-login="{{ s }}">
-                        <span class="twitch-login">twitch.tv/{{ s }}</span>
-                        <button type="button" class="btn btn-ghost twitch-remove" data-login="{{ s }}" title="Poista">Poista</button>
-                    </div>
-                    {% endfor %}
-                </div>
-                <div class="ticket-row" style="margin-top: 1rem;">
-                    <label data-i18n="gs.twitch_add">Lisää streameri (käyttäjänimi)</label>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <input type="text" id="twitch-add-input" placeholder="esim. s44gaming" class="channel-select" style="max-width: 200px;">
-                        <button type="button" id="twitch-add-btn" class="btn btn-ghost">Lisää</button>
-                    </div>
-                </div>
-                <div class="ticket-row">
-                    <label data-i18n="gs.twitch_channel">Kanava johon ilmoitukset lähetetään</label>
-                    <select id="twitch-channel" class="channel-select" style="max-width: 280px;">
-                        <option value="">– Ei kanavaa –</option>
-                        {% for ch in channels %}
-                        <option value="{{ ch.id }}" {% if twitch_channel == (ch.id|string) %}selected{% endif %}>{{ ch.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <button type="button" class="btn btn-primary" id="twitch-save">Tallenna</button>
-            </div>
+
 
             <!-- Starboard -->
             <div class="settings-card">

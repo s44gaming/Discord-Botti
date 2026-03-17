@@ -26,6 +26,7 @@ Voit käyttää S44Gamingin ylläpitämää Xevrion-bottia omalla palvelimellasi
 - **Moderaatio** – kick, ban, mute, warn, clear, slowmode, say – roolit ja toiminnat webistä
 - **Serverilogit** – mod-toiminnot, jäsenet liittyy/poistuu, viestien poisto/muokkaus, äänikanava
 - **Tikettijärjestelmä** – staff-rooli, kategoria, kanava, tiketin aiheet, transcript-kanava
+- **TempVoice** – tempvoice-paneeli: käyttäjä luo oman väliaikaisen äänikanavan (vain omistajalla täydet oikeudet), tyhjä kanava poistuu 5 min jälkeen
 - **Levellijärjestelmä** – taso ja XP, leaderboard, ääni-XP, taso-roolit
 - **Minipelit** – coinflip, dice, 8-ball, rps, choose, roulette, guess
 - **AFK** – /afk asettaa AFK-tilan; mainitse AFK-käyttäjä → botti vastaa syyllä
@@ -44,6 +45,7 @@ Voit käyttää S44Gamingin ylläpitämää Xevrion-bottia omalla palvelimellasi
 ## Uudet ominaisuudet
 
 - **Tikettiaiheen useat roolit** – Aiheeseen voi valita web-paneelista useita rooleja (Ctrl/Cmd + klikkaus). Vain valitut roolit näkevät kyseisen aiheen tiketit (staff näkee kaikki).
+- **TempVoice** – TempVoice-paneeli (`/tempvoice_panel`) + automaattinen siivous: kanava poistuu, jos se on tyhjä yli 5 minuuttia.
 
 ## Vaatimukset
 
@@ -83,14 +85,14 @@ Voit käyttää S44Gamingin ylläpitämää Xevrion-bottia omalla palvelimellasi
 `/coinflip`, `/dice`, `/8ball`, `/rps`, `/guess`, `/choose`, `/roulette`
 
 ### Muut
-`/level`, `/leaderboard`, `/afk`, `/suggestion`, `/reminder`, `/giveaway`, `/poll`, `/fivem`, `/ticket_panel`
+`/level`, `/leaderboard`, `/afk`, `/suggestion`, `/reminder`, `/giveaway`, `/poll`, `/fivem`, `/ticket_panel`, `/tempvoice_panel`
 
 ## Projektin rakenne
 
 ```
 run.py, bot.py, web_app.py, database.py, config.py, bot_info.py
-commands/ (ping, komennot_lista, info, hallinta, kutsu, moderaatio, taso, tiketti, minipelit, fivem, afk, ehdotus, muistutus, arvonta, poll, avatar, userinfo, reverse)
-events/ (on_ready, server_logs, server_stats, levels, twitch_streams, afk, starboard, reminders)
+commands/ (ping, komennot_lista, info, hallinta, kutsu, moderaatio, taso, tiketti, tempvoice, minipelit, fivem, afk, ehdotus, muistutus, arvonta, poll, avatar, userinfo, reverse)
+events/ (on_ready, server_logs, server_stats, levels, twitch_streams, tempvoice, afk, starboard, reminders)
 web/ (templates, static)
 data/ (bot.db, bot_info.txt)
 ```
@@ -127,6 +129,7 @@ You can use S44Gaming's hosted Xevrion bot on your own server without self-hosti
 - **Moderation** – kick, ban, mute, warn, clear, slowmode, say – roles and actions configurable via web
 - **Server logs** – mod actions, member join/leave, message delete/edit, voice channel
 - **Ticket system** – staff role, category, channel, ticket topics, transcript channel
+- **TempVoice** – tempvoice panel: users create their own temporary voice channel (only owner has full permissions), empty channel auto-deletes after 5 minutes
 - **Level system** – level and XP, leaderboard, voice XP, level roles
 - **Mini games** – coinflip, dice, 8-ball, rps, choose, roulette, guess
 - **AFK** – /afk sets AFK status; mention AFK user → bot replies with their reason
@@ -145,6 +148,7 @@ You can use S44Gaming's hosted Xevrion bot on your own server without self-hosti
 ## What's new
 
 - **Multiple roles per ticket topic** – You can assign multiple roles to each topic in the web panel (Ctrl/Cmd + click). Only selected roles can see that topic's tickets (staff sees all).
+- **TempVoice** – TempVoice panel (`/tempvoice_panel`) + auto cleanup: the channel is deleted if empty for over 5 minutes.
 
 ## Requirements
 
@@ -184,14 +188,14 @@ You can use S44Gaming's hosted Xevrion bot on your own server without self-hosti
 `/coinflip`, `/dice`, `/8ball`, `/rps`, `/guess`, `/choose`, `/roulette`
 
 ### Other
-`/level`, `/leaderboard`, `/afk`, `/suggestion`, `/reminder`, `/giveaway`, `/poll`, `/fivem`, `/ticket_panel`
+`/level`, `/leaderboard`, `/afk`, `/suggestion`, `/reminder`, `/giveaway`, `/poll`, `/fivem`, `/ticket_panel`, `/tempvoice_panel`
 
 ## Project Structure
 
 ```
 run.py, bot.py, web_app.py, database.py, config.py, bot_info.py
-commands/ (ping, komennot_lista, info, hallinta, kutsu, moderaatio, taso, tiketti, minipelit, fivem, afk, ehdotus, muistutus, arvonta, poll, avatar, userinfo, reverse)
-events/ (on_ready, server_logs, server_stats, afk, starboard, reminders)
+commands/ (ping, komennot_lista, info, hallinta, kutsu, moderaatio, taso, tiketti, tempvoice, minipelit, fivem, afk, ehdotus, muistutus, arvonta, poll, avatar, userinfo, reverse)
+events/ (on_ready, server_logs, server_stats, tempvoice, afk, starboard, reminders)
 web/ (templates, static)
 data/ (bot.db, bot_info.txt)
 ```

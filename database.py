@@ -107,6 +107,45 @@ def init_db():
                 fire_at REAL NOT NULL
             )
         """)
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS tempvoice_channels (
+                guild_id TEXT NOT NULL,
+                channel_id TEXT PRIMARY KEY,
+                owner_id TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+
+def add_tempvoice_channel(guild_id: str, channel_id: str, owner_id: str) -> None:
+    with _get_conn() as conn:
+        conn.execute(
+            "INSERT OR REPLACE INTO tempvoice_channels (guild_id, channel_id, owner_id, created_at) VALUES (?, ?, ?, datetime('now'))",
+            (str(guild_id), str(channel_id), str(owner_id))
+        )
+
+
+def remove_tempvoice_channel(channel_id: str) -> None:
+    with _get_conn() as conn:
+        conn.execute("DELETE FROM tempvoice_channels WHERE channel_id = ?", (str(channel_id),))
+
+
+def is_tempvoice_channel(channel_id: str) -> bool:
+    with _get_conn() as conn:
+        row = conn.execute(
+            "SELECT 1 FROM tempvoice_channels WHERE channel_id = ?",
+            (str(channel_id),)
+        ).fetchone()
+    return bool(row)
+
+
+def get_tempvoice_owner(channel_id: str) -> str | None:
+    with _get_conn() as conn:
+        row = conn.execute(
+            "SELECT owner_id FROM tempvoice_channels WHERE channel_id = ?",
+            (str(channel_id),)
+        ).fetchone()
+    return str(row[0]) if row and row[0] else None
 
 
 def get_guild_settings(guild_id: str) -> dict:

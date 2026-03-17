@@ -54,6 +54,7 @@ COMMAND_FEATURES = [
     ("avatar", "Avatar", "/avatar – show profile picture"),
     ("userinfo", "Userinfo", "/userinfo – user details"),
     ("reverse", "Reverse", "/reverse – reverse text"),
+    ("tempvoice", "TempVoice", "Temp voice panel (/tempvoice_panel)"),
     ("hallinta", "Admin", "/admin – link to web dashboard"),
     ("kutsuviesti", "Send invite", "/sendinvite – create invite link"),
     ("taso", "Level", "/level – show level and XP"),
