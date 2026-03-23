@@ -44,8 +44,9 @@ Voit käyttää S44Gamingin ylläpitämää Xevrion-bottia omalla palvelimellasi
 
 ## Uudet ominaisuudet
 
-- **Tikettiaiheen useat roolit** – Aiheeseen voi valita web-paneelista useita rooleja (Ctrl/Cmd + klikkaus). Vain valitut roolit näkevät kyseisen aiheen tiketit (staff näkee kaikki).
-- **TempVoice** – TempVoice-paneeli (`/tempvoice_panel`) + automaattinen siivous: kanava poistuu, jos se on tyhjä yli 5 minuuttia.
+- **Palvelinmallin palautus** – Voit tallentaa/palauttaa palvelinmallin webistä ja slash-komennoilla.
+- **discord.new-tuki** – Malli voidaan palauttaa suoraan linkistä, esim. [PaLvelin template](https://discord.new/xxXxxxxxxxxx).
+- **Turvallinen palautus** – Olemassa olevia samannimisiä kanavia ei poisteta; botti luo vain puuttuvat kategoriat ja kanavat.
 
 ## Vaatimukset
 
@@ -147,8 +148,9 @@ You can use S44Gaming's hosted Xevrion bot on your own server without self-hosti
 
 ## What's new
 
-- **Multiple roles per ticket topic** – You can assign multiple roles to each topic in the web panel (Ctrl/Cmd + click). Only selected roles can see that topic's tickets (staff sees all).
-- **TempVoice** – TempVoice panel (`/tempvoice_panel`) + auto cleanup: the channel is deleted if empty for over 5 minutes.
+- **Server template restore** – Save/restore server templates from both the web dashboard and slash commands.
+- **discord.new support** – Restore directly from a template link, e.g. [Server template](https://discord.new/xxXxxxxxxxxx).
+- **Safe restore behavior** – Existing channels with the same names are not deleted; the bot only creates missing categories/channels.
 
 ## Requirements
 

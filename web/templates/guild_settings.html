@@ -67,6 +67,32 @@
                 {% endfor %}
                 </div>
             </div>
+            <div class="settings-card">
+                <h2 data-i18n="gs.server_template">Palvelinmalli</h2>
+                <p class="card-desc" data-i18n="gs.server_template_desc">Tallenna nykyinen kanavarakenne ja palauta se myöhemmin. Palautus luo vain puuttuvat kategoriat/kanavat.</p>
+                <div class="ticket-settings">
+                    <div class="ticket-row">
+                        <button type="button" class="btn btn-primary" id="server-template-save" data-i18n="gs.server_template_save">Tallenna malli</button>
+                    </div>
+                    <div class="ticket-row">
+                        <label data-i18n="gs.server_template_use_link">Käytä discord.new mallia</label>
+                        <input type="text" id="server-template-link" class="channel-select" value="https://discord.new/xxXxxxxxxxxx" placeholder="https://discord.new/xxXxxxxxxxxx">
+                    </div>
+                    <div class="ticket-row">
+                        <button type="button" class="btn btn-primary" id="server-template-restore-link" data-i18n="gs.server_template_restore_link">Palauta linkistä (luo puuttuvat)</button>
+                    </div>
+                    <div class="ticket-row">
+                        <button type="button" class="btn btn-ghost" id="server-template-restore" data-i18n="gs.server_template_restore">Palauta malli (luo puuttuvat)</button>
+                    </div>
+                    <p class="muted" id="server-template-status">
+                        {% if has_server_template %}
+                        <span data-i18n="gs.server_template_status_saved">Tallennettu malli löytyy valmiiksi.</span>
+                        {% else %}
+                        <span data-i18n="gs.server_template_status_missing">Mallia ei ole vielä tallennettu.</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
             </div>
             </section>
 
@@ -1097,6 +1123,73 @@
                 if (!res.ok) alert('Roolien tallennus epäonnistui');
             });
         }
+
+        // Palvelinmalli (save / restore)
+        const serverTemplateStatus = document.getElementById('server-template-status');
+        const t = (k) => (window.XevrionI18n?.t ? window.XevrionI18n.t(k) : k);
+        document.getElementById('server-template-save')?.addEventListener('click', async function() {
+            this.disabled = true;
+            const res = await fetch(`/api/guild/${guildId}/server-template/save`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json().catch(() => ({}));
+            this.disabled = false;
+            if (!res.ok) {
+                alert(data.error || t('gs.server_template_save_failed'));
+                return;
+            }
+            if (serverTemplateStatus) serverTemplateStatus.textContent = t('gs.server_template_status_saved');
+            alert(t('gs.server_template_saved'));
+        });
+        document.getElementById('server-template-restore')?.addEventListener('click', async function() {
+            if (!confirm(t('gs.server_template_confirm_restore'))) return;
+            this.disabled = true;
+            const res = await fetch(`/api/guild/${guildId}/server-template/restore`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json().catch(() => ({}));
+            this.disabled = false;
+            if (!res.ok) {
+                alert(data.error || t('gs.server_template_restore_failed'));
+                return;
+            }
+            const s = data.stats || {};
+            alert(
+                `${t('gs.server_template_restore_done')}\n` +
+                `${t('gs.server_template_stats_categories')}: ${s.created_categories || 0}\n` +
+                `${t('gs.server_template_stats_text')}: ${s.created_text_channels || 0}\n` +
+                `${t('gs.server_template_stats_voice')}: ${s.created_voice_channels || 0}\n` +
+                `${t('gs.server_template_stats_skipped')}: ${s.skipped_existing || 0}`
+            );
+        });
+        document.getElementById('server-template-restore-link')?.addEventListener('click', async function() {
+            const link = (document.getElementById('server-template-link')?.value || '').trim();
+            if (!link) { alert(t('gs.server_template_link_required')); return; }
+            if (!confirm(t('gs.server_template_confirm_restore_link'))) return;
+            this.disabled = true;
+            const res = await fetch(`/api/guild/${guildId}/server-template/restore-link`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ link })
+            });
+            const data = await res.json().catch(() => ({}));
+            this.disabled = false;
+            if (!res.ok) {
+                alert(data.error || t('gs.server_template_restore_link_failed'));
+                return;
+            }
+            const s = data.stats || {};
+            if (serverTemplateStatus) serverTemplateStatus.textContent = t('gs.server_template_status_saved');
+            alert(
+                `${t('gs.server_template_restore_link_done')}\n` +
+                `${t('gs.server_template_stats_categories')}: ${s.created_categories || 0}\n` +
+                `${t('gs.server_template_stats_text')}: ${s.created_text_channels || 0}\n` +
+                `${t('gs.server_template_stats_voice')}: ${s.created_voice_channels || 0}\n` +
+                `${t('gs.server_template_stats_skipped')}: ${s.skipped_existing || 0}`
+            );
+        });
     </script>
     <footer class="site-footer">© <span id="year"></span> <span data-i18n="dash.footer">S44Gaming. Kaikki oikeudet pidätetään.</span></footer>
     <script src="{{ url_for('static', filename='js/idle-logout.js') }}"></script>

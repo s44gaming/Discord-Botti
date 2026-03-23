@@ -2,6 +2,7 @@ import json
 import os
 import sys
 import secrets
+import asyncio
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -9,6 +10,8 @@ import requests
 from flask import Flask, redirect, url_for, session, request, jsonify, render_template
 from functools import wraps
 import database
+from server_template_utils import capture_server_template, restore_server_template
+from server_template_utils import extract_discord_template_code, template_from_discord_payload
 from config import DEV_USER_IDS, BOT_INFO_EDIT_PASSWORD
 
 _REQ_TIMEOUT = 30
@@ -794,6 +797,7 @@ def guild_settings(guild_id):
     reminder_cooldown = int(settings.get("reminder_cooldown_sec", 60))
     welcome_message = settings.get("welcome_message") or "Tervetuloa {mention} palvelimelle! 👋"
     goodbye_message = settings.get("goodbye_message") or "**{user}** lähti palvelimelta. 👋"
+    has_server_template = bool(database.get_server_template(guild_id))
     return render_template(
         "guild_settings.html",
         guild=guild,
@@ -848,6 +852,7 @@ def guild_settings(guild_id):
         reminder_cooldown=reminder_cooldown,
         welcome_message=welcome_message,
         goodbye_message=goodbye_message,
+        has_server_template=has_server_template,
         user=session["user"]
     )
 
@@ -865,6 +870,113 @@ def toggle_feature(guild_id, feature):
     enabled = bool(data.get("enabled", True))
     settings = database.update_feature(guild_id, feature, enabled)
     return jsonify({"success": True, "settings": settings})
+
+
+@app.route("/api/guild/<guild_id>/server-template/save", methods=["POST"])
+@login_required
+def api_save_server_template(guild_id):
+    guilds = get_user_guilds()
+    if not any(g["id"] == guild_id for g in guilds):
+        return jsonify({"error": "Ei oikeuksia"}), 403
+    try:
+        import shared_state
+        bot = shared_state.get_bot()
+        if not bot or not bot.loop.is_running():
+            return jsonify({"error": "Botti ei ole käynnissä."}), 400
+        guild_obj = bot.get_guild(int(guild_id))
+        if not guild_obj:
+            return jsonify({"error": "Botti ei ole tällä palvelimella."}), 404
+        template = asyncio.run_coroutine_threadsafe(
+            _capture_template_async(guild_obj),
+            bot.loop
+        ).result(timeout=20)
+        database.set_server_template(guild_id, template)
+        return jsonify({"success": True, "message": "Palvelinmalli tallennettu."})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/guild/<guild_id>/server-template/restore", methods=["POST"])
+@login_required
+def api_restore_server_template(guild_id):
+    guilds = get_user_guilds()
+    if not any(g["id"] == guild_id for g in guilds):
+        return jsonify({"error": "Ei oikeuksia"}), 403
+    template = database.get_server_template(guild_id)
+    if not template:
+        return jsonify({"error": "Tallennettua palvelinmallia ei löydy."}), 400
+    try:
+        import shared_state
+        bot = shared_state.get_bot()
+        if not bot or not bot.loop.is_running():
+            return jsonify({"error": "Botti ei ole käynnissä."}), 400
+        guild_obj = bot.get_guild(int(guild_id))
+        if not guild_obj:
+            return jsonify({"error": "Botti ei ole tällä palvelimella."}), 404
+        stats = asyncio.run_coroutine_threadsafe(
+            restore_server_template(guild_obj, template),
+            bot.loop
+        ).result(timeout=90)
+        return jsonify({"success": True, "stats": stats})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/guild/<guild_id>/server-template/restore-link", methods=["POST"])
+@login_required
+def api_restore_server_template_from_link(guild_id):
+    guilds = get_user_guilds()
+    if not any(g["id"] == guild_id for g in guilds):
+        return jsonify({"error": "Ei oikeuksia"}), 403
+
+    data = request.get_json() or {}
+    link_or_code = (data.get("link") or "").strip()
+    code = extract_discord_template_code(link_or_code)
+    if not code:
+        return jsonify({"error": "Virheellinen discord.new-linkki tai template-koodi."}), 400
+
+    try:
+        payload = _fetch_discord_template_payload(code)
+        template = template_from_discord_payload(payload)
+        database.set_server_template(guild_id, template)
+    except Exception as e:
+        return jsonify({"error": f"Template-linkin haku epäonnistui: {e}"}), 500
+
+    try:
+        import shared_state
+        bot = shared_state.get_bot()
+        if not bot or not bot.loop.is_running():
+            return jsonify({"error": "Botti ei ole käynnissä."}), 400
+        guild_obj = bot.get_guild(int(guild_id))
+        if not guild_obj:
+            return jsonify({"error": "Botti ei ole tällä palvelimella."}), 404
+        stats = asyncio.run_coroutine_threadsafe(
+            restore_server_template(guild_obj, template),
+            bot.loop
+        ).result(timeout=90)
+        return jsonify({"success": True, "stats": stats})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+async def _capture_template_async(guild_obj):
+    return capture_server_template(guild_obj)
+
+
+def _fetch_discord_template_payload(code: str) -> dict:
+    if not BOT_TOKEN:
+        raise RuntimeError("DISCORD_TOKEN puuttuu.")
+    r = requests.get(
+        f"{DISCORD_API}/guilds/templates/{code}",
+        headers={"Authorization": f"Bot {BOT_TOKEN}", **_REQ_HEADERS},
+        timeout=_REQ_TIMEOUT
+    )
+    if r.status_code != 200:
+        raise RuntimeError(f"Discord API virhe ({r.status_code})")
+    data = r.json()
+    if not isinstance(data, dict) or not data.get("serialized_source_guild"):
+        raise RuntimeError("Template-data puuttuu tai on virheellinen.")
+    return data
 
 
 @app.route("/api/guild/<guild_id>/fivem/settings", methods=["POST"])

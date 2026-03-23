@@ -828,4 +828,18 @@ def get_all_guild_settings_for_backup() -> dict:
         for row in rows
     }
 
+
+def get_server_template(guild_id: str) -> dict:
+    settings = get_guild_settings(guild_id)
+    template = settings.get("server_template")
+    if not isinstance(template, dict):
+        return {}
+    return template
+
+
+def set_server_template(guild_id: str, template: dict) -> None:
+    s = get_guild_settings(guild_id)
+    s["server_template"] = template if isinstance(template, dict) else {}
+    set_guild_settings(guild_id, s)
+
 # Tekijänoikeudet S44Gaming kaikki oikeudet pidätetään. https://discord.gg/ujB4JHfgcg
